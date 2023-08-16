@@ -1,9 +1,10 @@
 import { useEffect, useReducer } from 'react';
 import Header from './Header';
-import Main from './Main';
-import Loader from './Loader';
-import Error from './Error';
 import StartScreen from './StartScreen';
+import Error from './Error';
+import Loader from './Loader';
+import Questions from './Questions';
+import Main from './Main';
 
 const initialState = {
   questions: [],
@@ -26,12 +27,19 @@ const reducer = (state, action) => {
         ...state,
         status: 'error',
       };
+
+    case 'startGame':
+      return {
+        ...state,
+        status: 'active',
+      };
+
     default:
       throw new Error('Action unknown');
   }
 };
 
-function App() {
+const App = () => {
   const [{ questions, status }, dispatch] = useReducer(reducer, initialState);
 
   const numQuestions = questions.length;
@@ -47,11 +55,14 @@ function App() {
       <Header />
       <Main>
         {status === 'loading' && <Loader />}
-        {status === 'ready' && <StartScreen length={numQuestions} />}
         {status === 'error' && <Error />}
+        {status === 'ready' && (
+          <StartScreen length={numQuestions} dispatch={dispatch} />
+        )}
+        {status === 'active' && <Questions />}
       </Main>
     </div>
   );
-}
+};
 
 export default App;
