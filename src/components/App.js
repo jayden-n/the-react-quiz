@@ -12,6 +12,7 @@ const initialState = {
   // 'loading', 'error', 'ready', 'active', 'finished'
   status: 'loading',
   index: 0,
+  answer: null,
 };
 
 const reducer = (state, action) => {
@@ -34,14 +35,18 @@ const reducer = (state, action) => {
         ...state,
         status: 'active',
       };
-
+    case 'newAnswer':
+      return {
+        ...state,
+        answer: action.payload,
+      };
     default:
       throw new Error('Action unknown');
   }
 };
 
 const App = () => {
-  const [{ questions, status, index }, dispatch] = useReducer(
+  const [{ questions, status, index, answer }, dispatch] = useReducer(
     reducer,
     initialState
   );
@@ -63,7 +68,13 @@ const App = () => {
         {status === 'ready' && (
           <StartScreen length={numQuestions} dispatch={dispatch} />
         )}
-        {status === 'active' && <Questions question={questions[index]} />}
+        {status === 'active' && (
+          <Questions
+            question={questions[index]}
+            dispatch={dispatch}
+            answer={answer}
+          />
+        )}
       </Main>
     </div>
   );
