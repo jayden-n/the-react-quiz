@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 
-const FinishedScreen = ({ points, maxPossiblePoints, highscore }) => {
+const FinishedScreen = ({ points, maxPossiblePoints, highscore, dispatch }) => {
   const percentage = (points / maxPossiblePoints) * 100;
 
   let emoji;
@@ -25,6 +25,12 @@ const FinishedScreen = ({ points, maxPossiblePoints, highscore }) => {
         ({Math.round(percentage)}%)
       </p>
       <p className='highscore'>(HighScore: {highscore})</p>
+      <button
+        className='btn btn-ui'
+        onClick={() => dispatch({ type: 'restart' })}
+      >
+        Restart
+      </button>
     </Fragment>
   );
 };
